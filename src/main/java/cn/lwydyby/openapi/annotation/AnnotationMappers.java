@@ -15,8 +15,10 @@ import io.swagger.v3.oas.models.responses.ApiResponses;
 import org.apache.commons.lang3.tuple.ImmutablePair;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import sun.reflect.generics.reflectiveObjects.ParameterizedTypeImpl;
 
 import java.lang.reflect.Field;
+import java.lang.reflect.Type;
 import java.util.*;
 import java.util.stream.Collectors;
 
@@ -149,6 +151,16 @@ public final class AnnotationMappers {
                         components.getSchemas().put(field.getType().getSimpleName(),getSchema(field.getType(),components));
                     }
                     schema1.set$ref(AnnotationsUtils.COMPONENTS_REF+field.getType().getSimpleName());
+                }
+                if(type.equals("array")){
+                    Type genericType = field.getGenericType();  //取得field的type
+                    ParameterizedTypeImpl parameterizedType = (ParameterizedTypeImpl) genericType; //强转成具体的实现类
+                    Class genericClazz = (Class) parameterizedType.getActualTypeArguments()[0];  //取得包含的泛型类型
+                    ArraySchema arraySchema=new ArraySchema();
+                    String itemType=transType(genericClazz);
+                    Schema item=new Schema();
+                    item.setType(itemType);
+                    arraySchema.setItems(item);
                 }
                 schema1.setType(type);
                 properties.put(field.getName(),schema1);
