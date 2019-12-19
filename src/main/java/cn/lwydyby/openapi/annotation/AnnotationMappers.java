@@ -3,6 +3,7 @@ package cn.lwydyby.openapi.annotation;
 import io.swagger.v3.core.util.AnnotationsUtils;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.parameters.RequestBody;
+import io.swagger.v3.oas.models.Components;
 import io.swagger.v3.oas.models.headers.Header;
 import io.swagger.v3.oas.models.media.ArraySchema;
 import io.swagger.v3.oas.models.media.Content;
@@ -15,9 +16,8 @@ import org.apache.commons.lang3.tuple.ImmutablePair;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import java.util.Arrays;
-import java.util.List;
-import java.util.Optional;
+import java.lang.reflect.Field;
+import java.util.*;
 import java.util.stream.Collectors;
 
 /**
@@ -108,7 +108,7 @@ public final class AnnotationMappers {
         return null;
     }
 
-    static io.swagger.v3.oas.models.parameters.RequestBody fromRequestBody(RequestBody body) {
+    static io.swagger.v3.oas.models.parameters.RequestBody fromRequestBody(RequestBody body, Components components) {
         io.swagger.v3.oas.models.parameters.RequestBody rb = new io.swagger.v3.oas.models.parameters.RequestBody();
         rb.setDescription(body.description());
         if (body.content().length == 1) {
@@ -116,10 +116,69 @@ public final class AnnotationMappers {
             io.swagger.v3.oas.annotations.media.Content content = body.content()[0];
             if (!Void.class.equals(content.array().schema().implementation()))
                 c.get(content.mediaType()).getSchema().setExample(clean(content.array().schema().example()));
-            else if (!Void.class.equals(content.schema().implementation()))
-                c.get(content.mediaType()).getSchema().setExample(content.schema().example());
+            else if (!Void.class.equals(content.schema().implementation())) {
+                Class schemaClass=content.schema().implementation();
+                String schemaKey=AnnotationsUtils.COMPONENTS_REF+schemaClass.getSimpleName();
+                if(components.getSchemas()==null){
+                    components.setSchemas(new HashMap<>());
+                }
+                if(!components.getSchemas().containsKey(schemaClass.getSimpleName())){
+                    Schema schema=getSchema(schemaClass,components);
+                    components.getSchemas().put(schemaClass.getSimpleName(),schema);
+                }
+                c.get(content.mediaType()).getSchema().set$ref(schemaKey);
+            }
             rb.setContent(c);
         }
         return rb;
     }
+    private static Schema getSchema(Class schemaClass,Components components){
+        Field[] fields=schemaClass.getDeclaredFields();
+        Schema schema=new Schema();
+        Map<String,Schema> properties=new HashMap<>();
+        for(Field field:fields){
+            io.swagger.v3.oas.annotations.media.Schema annotation=field.getAnnotation(io.swagger.v3.oas.annotations.media.Schema.class);
+            if(annotation==null){
+                continue;
+            }
+            Optional<Schema> schemaFromAnnotation = AnnotationsUtils.getSchemaFromAnnotation(annotation,null);
+            schemaFromAnnotation.ifPresent(schema1 -> {
+                String type=transType(field.getType());
+                if(type.equals("object")){
+                    if(!components.getSchemas().containsKey(field.getType().getSimpleName())){
+                        components.getSchemas().put(field.getType().getSimpleName(),getSchema(field.getType(),components));
+                    }
+                    schema1.set$ref(AnnotationsUtils.COMPONENTS_REF+field.getType().getSimpleName());
+                }
+                schema1.setType(type);
+                properties.put(field.getName(),schema1);
+            });
+        }
+        schema.setName(schemaClass.getSimpleName());
+        schema.setProperties(properties);
+        schema.setType("object");
+        return schema;
+    }
+
+    private static String transType(Class type){
+        if(type.isAssignableFrom(Integer.class)||type.isAssignableFrom(Long.class)
+                ||type.isAssignableFrom(int.class) ||type.isAssignableFrom(long.class)){
+            return "integer";
+        }else if(type.isAssignableFrom(Double.class)||type.isAssignableFrom(Float.class)
+                ||type.isAssignableFrom(double.class) ||type.isAssignableFrom(float.class)){
+            return "number";
+        }else if(type.isAssignableFrom(String.class)||type.isAssignableFrom(Byte.class)
+                ||type.isAssignableFrom(Date.class) ||type.isAssignableFrom(byte.class)||type.isAssignableFrom(Enum.class)){
+            return "string";
+        }else if(type.isAssignableFrom(Boolean.class)||type.isAssignableFrom(boolean.class)){
+            return "boolean";
+        }else if(type.isEnum()){
+            return "string";
+        }else if(type.isArray()||type.isAssignableFrom(List.class)||type.isAssignableFrom(Set.class)){
+            return "array";
+        }
+        return "object";
+    }
+
+
 }

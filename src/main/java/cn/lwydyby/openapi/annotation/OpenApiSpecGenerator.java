@@ -3,6 +3,7 @@ package cn.lwydyby.openapi.annotation;
 import cn.lwydyby.openapi.scanner.scanner.ClassScanner;
 import cn.lwydyby.openapi.scanner.scanner.impl.DefaultClassScanner;
 import io.swagger.v3.oas.annotations.parameters.RequestBody;
+import io.swagger.v3.oas.models.Components;
 import io.swagger.v3.oas.models.OpenAPI;
 import io.swagger.v3.oas.models.Operation;
 import io.swagger.v3.oas.models.PathItem;
@@ -25,7 +26,10 @@ import java.util.stream.Collectors;
  * @date 2019-12-18 09:26
  */
 public final class OpenApiSpecGenerator {
+
     private static final Logger log = LoggerFactory.getLogger(OpenApiSpecGenerator.class);
+
+    private static Components components=new Components();
 
     public static OpenAPI generateOpenApiSpecFromRouter(Router router, String title, String version, String serverUrl, List<String> scanPkgs) {
         log.info("Generating Spec for vertx routes.");
@@ -37,7 +41,7 @@ public final class OpenApiSpecGenerator {
         server.setUrl(serverUrl);
         openAPI.servers(Collections.singletonList(server));
         openAPI.setInfo(info);
-
+        openAPI.setComponents(components);
         Map<String, PathItem> paths = extractAllPaths(router);
         extractOperationInfo(router, paths, scanPkgs);
         paths.forEach(openAPI::path);
@@ -101,10 +105,8 @@ public final class OpenApiSpecGenerator {
                     }
                     if (matchedOperation != null) {
                         AnnotationMappers.decorateOperationFromAnnotation(annotation, matchedOperation);
-                        RequestBody body = method.getParameters()[0].getAnnotation(RequestBody.class);
-                        if (body != null) {
-                            matchedOperation.setRequestBody(AnnotationMappers.fromRequestBody(body));
-                        }
+                        RequestBody body = annotation.requestBody();
+                        matchedOperation.setRequestBody(AnnotationMappers.fromRequestBody(body,components));
                     }
                 }
             });
