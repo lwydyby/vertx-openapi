@@ -1,0 +1,481 @@
+{
+  "openapi" : "3.0.1",
+  "info" : {
+    "title" : "admin API文档",
+    "version" : "v1.0"
+  },
+  "servers" : [ {
+    "url" : "0.0.0.0:9100"
+  } ],
+  "paths" : {
+    "/consumers/:consumer/acls" : {
+      "get" : {
+        "parameters" : [ {
+          "name" : "consumer"
+        } ]
+      },
+      "put" : {
+        "parameters" : [ {
+          "name" : "consumer"
+        } ]
+      },
+      "post" : {
+        "parameters" : [ {
+          "name" : "consumer"
+        } ]
+      },
+      "delete" : {
+        "parameters" : [ {
+          "name" : "consumer"
+        } ]
+      }
+    },
+    "/plugins/:id" : {
+      "get" : {
+        "parameters" : [ {
+          "name" : "id"
+        } ]
+      },
+      "put" : {
+        "parameters" : [ {
+          "name" : "id"
+        } ]
+      },
+      "delete" : {
+        "parameters" : [ {
+          "name" : "id"
+        } ]
+      }
+    },
+    "/login" : {
+      "post" : {
+        "parameters" : [ ]
+      }
+    },
+    "/key-auth/all" : {
+      "get" : {
+        "parameters" : [ ]
+      }
+    },
+    "/acls/:id/consumer" : {
+      "get" : {
+        "parameters" : [ {
+          "name" : "id"
+        } ]
+      }
+    },
+    "/users/:name" : {
+      "get" : {
+        "parameters" : [ {
+          "name" : "name"
+        } ]
+      }
+    },
+    "/upstreams/:upstreamId/targets" : {
+      "post" : {
+        "parameters" : [ {
+          "name" : "upstreamId"
+        } ]
+      }
+    },
+    "/key-auth/:key" : {
+      "get" : {
+        "parameters" : [ {
+          "name" : "key"
+        } ]
+      }
+    },
+    "/acls/all" : {
+      "get" : {
+        "parameters" : [ ]
+      }
+    },
+    "/routes/:routeId/plugins" : {
+      "get" : {
+        "parameters" : [ {
+          "name" : "routeId"
+        } ]
+      },
+      "post" : {
+        "parameters" : [ {
+          "name" : "routeId"
+        } ]
+      }
+    },
+    "/servers/:serverId/routes" : {
+      "get" : {
+        "parameters" : [ {
+          "name" : "serverId"
+        } ]
+      },
+      "post" : {
+        "parameters" : [ {
+          "name" : "serverId"
+        } ]
+      },
+      "delete" : {
+        "parameters" : [ {
+          "name" : "serverId"
+        } ]
+      }
+    },
+    "/users/:id" : {
+      "put" : {
+        "parameters" : [ {
+          "name" : "id"
+        } ]
+      },
+      "delete" : {
+        "parameters" : [ {
+          "name" : "id"
+        } ]
+      }
+    },
+    "/consumers" : {
+      "get" : {
+        "parameters" : [ ]
+      },
+      "post" : {
+        "parameters" : [ ]
+      }
+    },
+    "/upstreams/:id/targets" : {
+      "get" : {
+        "parameters" : [ {
+          "name" : "id"
+        } ]
+      }
+    },
+    "/targets" : {
+      "get" : {
+        "parameters" : [ ]
+      },
+      "post" : {
+        "parameters" : [ ]
+      }
+    },
+    "/key-auth/:key/consumer" : {
+      "get" : {
+        "parameters" : [ {
+          "name" : "key"
+        } ]
+      }
+    },
+    "/key-auth/:id" : {
+      "delete" : {
+        "parameters" : [ {
+          "name" : "id"
+        } ]
+      }
+    },
+    "/routes" : {
+      "get" : {
+        "parameters" : [ ]
+      },
+      "post" : {
+        "parameters" : [ ]
+      }
+    },
+    "/acls" : {
+      "get" : {
+        "parameters" : [ ]
+      }
+    },
+    "/servers" : {
+      "get" : {
+        "parameters" : [ ]
+      },
+      "post" : {
+        "summary" : "创建服务.",
+        "description" : "",
+        "operationId" : "",
+        "parameters" : [ ],
+        "requestBody" : {
+          "description" : "创建服务参数",
+          "content" : {
+            "application/json" : {
+              "schema" : {
+                "$ref" : "#/components/schemas/ServerRequest"
+              }
+            }
+          }
+        },
+        "responses" : {
+          "200" : {
+            "description" : "servers Created."
+          },
+          "400" : {
+            "description" : "Bad Request."
+          }
+        },
+        "deprecated" : false
+      }
+    },
+    "/key-auth" : {
+      "get" : {
+        "parameters" : [ ]
+      }
+    },
+    "/upstreams/:id" : {
+      "get" : {
+        "parameters" : [ {
+          "name" : "id"
+        } ]
+      },
+      "put" : {
+        "parameters" : [ {
+          "name" : "id"
+        } ]
+      },
+      "delete" : {
+        "parameters" : [ {
+          "name" : "id"
+        } ]
+      }
+    },
+    "/routes/:id" : {
+      "get" : {
+        "parameters" : [ {
+          "name" : "id"
+        } ]
+      },
+      "put" : {
+        "parameters" : [ {
+          "name" : "id"
+        } ]
+      },
+      "delete" : {
+        "parameters" : [ {
+          "name" : "id"
+        } ]
+      }
+    },
+    "/users" : {
+      "get" : {
+        "parameters" : [ ]
+      },
+      "post" : {
+        "parameters" : [ ]
+      }
+    },
+    "/servers/:id" : {
+      "get" : {
+        "parameters" : [ {
+          "name" : "id"
+        } ]
+      },
+      "put" : {
+        "parameters" : [ {
+          "name" : "id"
+        } ]
+      },
+      "delete" : {
+        "parameters" : [ {
+          "name" : "id"
+        } ]
+      }
+    },
+    "/consumers/:id" : {
+      "get" : {
+        "parameters" : [ {
+          "name" : "id"
+        } ]
+      },
+      "put" : {
+        "parameters" : [ {
+          "name" : "id"
+        } ]
+      },
+      "delete" : {
+        "parameters" : [ {
+          "name" : "id"
+        } ]
+      }
+    },
+    "/plugins" : {
+      "get" : {
+        "parameters" : [ ]
+      },
+      "post" : {
+        "parameters" : [ ]
+      }
+    },
+    "/targets/:id" : {
+      "get" : {
+        "parameters" : [ {
+          "name" : "id"
+        } ]
+      },
+      "put" : {
+        "parameters" : [ {
+          "name" : "id"
+        } ]
+      },
+      "delete" : {
+        "parameters" : [ {
+          "name" : "id"
+        } ]
+      }
+    },
+    "/plugins/config/:name" : {
+      "get" : {
+        "parameters" : [ {
+          "name" : "name"
+        } ]
+      }
+    },
+    "/upstreams" : {
+      "get" : {
+        "parameters" : [ ]
+      },
+      "post" : {
+        "parameters" : [ ]
+      }
+    },
+    "/config" : {
+      "post" : {
+        "parameters" : [ ]
+      }
+    },
+    "/plugins/names" : {
+      "get" : {
+        "parameters" : [ ]
+      }
+    },
+    "/servers/:serverId/plugins" : {
+      "get" : {
+        "parameters" : [ {
+          "name" : "serverId"
+        } ]
+      },
+      "post" : {
+        "parameters" : [ {
+          "name" : "serverId"
+        } ]
+      }
+    },
+    "/consumers/:consumerId/plugins" : {
+      "get" : {
+        "parameters" : [ {
+          "name" : "consumerId"
+        } ]
+      },
+      "post" : {
+        "parameters" : [ {
+          "name" : "consumerId"
+        } ]
+      }
+    },
+    "/consumers/:consumer/key-auth" : {
+      "get" : {
+        "parameters" : [ {
+          "name" : "consumer"
+        } ]
+      },
+      "post" : {
+        "parameters" : [ {
+          "name" : "consumer"
+        } ]
+      },
+      "delete" : {
+        "parameters" : [ {
+          "name" : "consumer"
+        } ]
+      }
+    },
+    "/acls/:id" : {
+      "get" : {
+        "parameters" : [ {
+          "name" : "id"
+        } ]
+      },
+      "delete" : {
+        "parameters" : [ {
+          "name" : "id"
+        } ]
+      }
+    }
+  },
+  "components" : {
+    "schemas" : {
+      "AclsRequest" : {
+        "type" : "object",
+        "properties" : {
+          "consumerId" : {
+            "type" : "string",
+            "description" : "租户id",
+            "example" : 0
+          },
+          "enable" : {
+            "type" : "boolean",
+            "description" : "是否可用",
+            "example" : false
+          },
+          "groups" : {
+            "type" : "array",
+            "description" : "分组",
+            "example" : "['1','2']"
+          }
+        }
+      },
+      "ServerRequest" : {
+        "type" : "object",
+        "properties" : {
+          "retries" : {
+            "type" : "integer",
+            "description" : "重试次数",
+            "example" : 0
+          },
+          "path" : {
+            "type" : "string",
+            "description" : "路径",
+            "example" : "/"
+          },
+          "port" : {
+            "type" : "integer",
+            "description" : "端口",
+            "example" : 80
+          },
+          "enable" : {
+            "type" : "boolean",
+            "description" : "是否可用",
+            "example" : false
+          },
+          "readTimeout" : {
+            "type" : "integer",
+            "description" : "读超时时间",
+            "example" : 60000
+          },
+          "name" : {
+            "type" : "string",
+            "description" : "名称",
+            "example" : "test"
+          },
+          "host" : {
+            "type" : "string",
+            "description" : "host",
+            "example" : "127.0.0.1"
+          },
+          "connectTimeout" : {
+            "type" : "integer",
+            "description" : "连接超时时间",
+            "example" : 60000
+          },
+          "writeTimeout" : {
+            "type" : "integer",
+            "description" : "写超时时间",
+            "example" : 60000
+          },
+          "aclsRequest" : {
+            "$ref" : "#/components/schemas/AclsRequest"
+          },
+          "protocols" : {
+            "type" : "string",
+            "description" : "协议类型",
+            "example" : "HTTP"
+          }
+        }
+      }
+    }
+  }
+}
